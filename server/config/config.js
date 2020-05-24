@@ -12,9 +12,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // Base de datos
 //==============
 
-//DB_PASSWORD
-//DB_USER
-
 let urlDB = process.env.NODE_ENV === 'dev' ?
     'mongodb://localhost:27017/cafe' :
     process.env.MONGO_URI;
