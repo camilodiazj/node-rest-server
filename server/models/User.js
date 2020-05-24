@@ -14,7 +14,7 @@ let userSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, 'Email is needed'],
+        required: [true, 'Email is needed']
     },
     password: {
         type: String,

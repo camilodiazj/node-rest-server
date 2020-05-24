@@ -12,10 +12,12 @@ app.use(bodyParser.json());
 
 app.use(require('./controllers/user'));
 
-mongoose.connect('mongodb://localhost:2717/cafe', {
+mongoose.connect(process.env.URLDB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-}, (err, resp) => {
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}, (err) => {
     if (err) throw err;
     console.log('Base de datos ONLINE');
 });
