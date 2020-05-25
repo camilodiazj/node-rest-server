@@ -61,7 +61,7 @@ app.put('/upload/:type/:id', (req, res) => {
     });
 });
 
-let userImage = (id, res, fileName) => {
+const userImage = (id, res, fileName) => {
     User.findById(id, (err, userDB) => {
         if (err) {
             return res.status(500).json({
@@ -77,9 +77,7 @@ let userImage = (id, res, fileName) => {
                 }
             });
         };
-
         userDB.img = fileName;
-
         userDB.save((err, userDB) => {
             res.json({
                 ok: true,
