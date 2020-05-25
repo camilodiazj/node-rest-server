@@ -7,18 +7,14 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
 app.post('/login', (req, res) => {
-
     let body = req.body;
-
     User.findOne({ email: body.email }, (e, userDB) => {
-
         if (e) {
             return res.status(500).json({
                 ok: false,
                 e
             });
         }
-
         if (!userDB) {
             return res.status(400).json({
                 ok: false,
@@ -27,7 +23,6 @@ app.post('/login', (req, res) => {
                 }
             });
         }
-
         if (!bcrypt.compareSync(body.password, userDB.password)) {
             return res.status(400).json({
                 ok: false,
@@ -36,23 +31,18 @@ app.post('/login', (req, res) => {
                 }
             });
         }
-
         let token = jwt.sign({
             user: userDB
         }, process.env.AUTH_SEED, { expiresIn: process.env.EXPIRATION_TOKEN });
-
         res.json({
             ok: true,
             user: userDB,
             token
         });
-
     });
-
 });
 
 // Google configs
-
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
@@ -69,9 +59,7 @@ async function verify(token) {
 };
 
 app.post('/google', async(req, res) => {
-
     let { idtoken } = req.body;
-
     let googleUser = await verify(idtoken)
         .catch(e => {
             return res.status(403).json({
@@ -79,16 +67,13 @@ app.post('/google', async(req, res) => {
                 error: e
             });
         });
-
     User.findOne({ email: googleUser.email }, (e, userDB) => {
-
         if (e) {
             return res.status(500).json({
                 ok: false,
                 e
             });
         }
-
         if (userDB) {
             if (!userDB.google) {
                 return res.status(500).json({
@@ -135,13 +120,9 @@ app.post('/google', async(req, res) => {
                     user: userDB,
                     token
                 });
-
             });
         };
-
     });
-
 });
-
 
 module.exports = app;
