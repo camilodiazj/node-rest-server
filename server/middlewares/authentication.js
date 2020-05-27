@@ -17,10 +17,23 @@ let verifyToken = (req, res, next) => {
     });
 };
 
+let verifyTokenImg = (req, res, next) => {
+    let token = req.query.token;
+    //decoded = Payload - body
+    jwt.verify(token, process.env.AUTH_SEED, (e, decoded) => {
+        if (e) {
+            return res.status(401).json({
+                ok: false,
+                e
+            })
+        }
+        req.user = decoded.user;
+        next();
+    });
+};
+
 let verifyADMIN_ROLE = (req, res, next) => {
-
     const { role } = req.user;
-
     if (role !== 'ADMIN_ROLE') {
         return res.status(401).json({
             ok: false,
@@ -29,12 +42,11 @@ let verifyADMIN_ROLE = (req, res, next) => {
             }
         })
     }
-
     next();
-
 };
 
 module.exports = {
     verifyToken,
-    verifyADMIN_ROLE
+    verifyADMIN_ROLE,
+    verifyTokenImg
 }
